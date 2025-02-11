@@ -8,15 +8,17 @@ dotenv.config()
 const Authenticate = async (req, res) => {
   console.log(req.body);
     // Destructure Assignment af username og password fra request body
-  const { id, firstname, lastname,email, password } = req.body
+  const { email, password } = req.body
 
   // Hvis brugernavn og password findes...
-  if (id && firstname && lastname && email && password) {
+  if (email && password) {
     // Henter db user ud fra username
     const user_result = await usersModel.findOne({
-      attributes: ["id", "firstname", "lastname", "email", "password"],
-      where: { email: username, is_active: 1 },
+      attributes: [ "id", "firstname", "lastname", "email", "password"],
+      where: { email: email, is_active: 1 },
     })
+    console.log(user_result);
+    
 
     if (!user_result) {
       // Returner forbidden hvis bruger ikke eksisterer
@@ -46,14 +48,14 @@ const Authenticate = async (req, res) => {
           const refresh_token = jwt.sign(
             {
               exp: expRefreshDate,
-              data: { id: data.id },
+              data: {  id: data.id, firstname: data.firstname, lastname: data.lastname, email: data.email },
             },
             process.env.TOKEN_REFRESH_KEY
           )
 
           // Updater refresh token i bruger database
           usersModel.update(
-            { refresh_token, refresh_token },
+            { refresh_token: refresh_token },
             {
               where: { id: data.id },
             }
@@ -72,7 +74,7 @@ const Authenticate = async (req, res) => {
             id: data.id,
             firstname: data.firstname,
             lastname: data.lastname,
-            email: username,
+            email: data.email,
             password:password
           }
 
