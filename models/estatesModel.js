@@ -87,7 +87,7 @@ estatesModel.init({
             key:'id'
         }
     },
-    type_id:{
+    estate_type_id:{
         type:DataTypes.BIGINT,
         allowNull:false,
         references:{

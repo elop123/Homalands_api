@@ -32,6 +32,9 @@ estatesController.get('/estates', async(req,res)=>{
           {model:energy_labelsModel,
             attributes:['name']
           },
+          {model:estateTypesModel,
+            attributes:['name']
+          },
                  
         ]
    });
