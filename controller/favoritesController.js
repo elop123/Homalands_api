@@ -13,7 +13,7 @@ favoritesController.get('/favorites', async(req,res)=>{
    });
 
        if(!data || data.length === 0) {
-          return res.json({ message: 'No data found'})
+        return res.status(404).json({ message: 'No favorites found' });
       }
       res.json(data)
   } catch (error) {

@@ -1,8 +1,23 @@
 import express from 'express'
 import { imagesModel } from '../models/imagesModel.js'
+import { estate_image_relModel } from '../models/estate_image_relModel.js'
 
 
 export const imagesController = express.Router()
+
+//Relations
+imagesModel.hasMany(estate_image_relModel, {
+  foreignKey: {
+  allowNull: false
+}
+})
+estate_image_relModel.belongsTo(imagesModel,
+  {
+      foreignKey: {
+      allowNull: false
+}
+  }
+)
 
 
 //Route to list(Read)
@@ -10,6 +25,10 @@ imagesController.get('/images', async(req,res)=>{
 //res.send('get list')
    try {
        const data = await imagesModel.findAll({
+        include: [{ 
+          model: estate_image_relModel, 
+          attributes: ['image_id'] 
+      }]
    });
 
        if(!data || data.length === 0) {
@@ -26,7 +45,11 @@ imagesController.get('/images/:id([0-9]*)', async(req,res)=>{
   try {
      const { id } = req.params
      const data = await imagesModel.findOne({ where: { id: id },
-    
+      include: [
+        {
+            model: estate_image_relModel,
+            attributes: ['image_id']
+        }]
      })
 
      if(!data) {
@@ -43,14 +66,14 @@ imagesController.get('/images/:id([0-9]*)', async(req,res)=>{
 
 // Route to create (CREATE)
 imagesController.post('/images', async (req, res) => {
-    const {filename, author, description} = req.body;
+    const {filename, author, description, image_id} = req.body;
     
-    if( !filename || !author  || !description ) {
+    if( !filename || !author  || !description || ! image_id) {
         return res.json({ message: 'Missing required data' })
     }
     try {
         const result = await imagesModel.create({
-             filename, author, description})
+             filename, author, description, image_id})
         res.status(201).json(result)
     } catch (error) {
         return res.json({ message: `Could not create images: ${error.message}`})
@@ -59,16 +82,16 @@ imagesController.post('/images', async (req, res) => {
 
  //Route til update
 imagesController.put('/images', async(req, res)=>{
-    const { id, filename, author, description} = req.body;
+    const { id, filename, author, description, image_id} = req.body;
     console.log(req.body);
     
    
-    if( !id || !filename || !author || !description ) {
+    if( !id || !filename || !author || !description || !image_id ) {
         return res.status(400).json({ message: 'Missing required data' });
     }
     try {
         const result = await imagesModel.update({
-            id, filename, author, description
+            id, filename, author, description, image_id
         }, {where:{id}})
         if (result === 0) {
             return res.status(404).json({ message: 'Image not found or no changes made' });

@@ -1,15 +1,15 @@
 import express from 'express'
-import { estatesTypesModel } from '../models/estatesTypesModel.js'
+import { estateTypesModel } from '../models/estateTypesModel.js'
 
 
-export const estatesTypesController = express.Router()
+export const estateTypesController = express.Router()
 
 
 //Route to list(Read)
-estatesTypesController.get('/estate_types', async(req,res)=>{
+estateTypesController.get('/estate_types', async(req,res)=>{
 //res.send('get list')
    try {
-       const data = await estatesModel.findAll({
+       const data = await estateTypesModel.findAll({
    });
 
        if(!data || data.length === 0) {
@@ -22,10 +22,10 @@ estatesTypesController.get('/estate_types', async(req,res)=>{
 })
 
 //Route to details (Read)
-estatesTypesController.get('/estate_type/:id([0-9]*)', async(req,res)=>{
+estateTypesController.get('/estate_types/:id([0-9]*)', async(req,res)=>{
   try {
      const { id } = req.params
-     const data = await estatesTypesModel.findOne({ where: { id: id },
+     const data = await estateTypesModel.findOne({ where: { id: id },
     
      })
 
@@ -41,7 +41,7 @@ estatesTypesController.get('/estate_type/:id([0-9]*)', async(req,res)=>{
 })
 
 // Route to create (CREATE)
-estatesTypesController.post('/estate_types', async (req, res) => {
+estateTypesController.post('/estate_types', async (req, res) => {
     const {name} = req.body;
     
     if( !name) {
@@ -49,7 +49,7 @@ estatesTypesController.post('/estate_types', async (req, res) => {
     }
  
     try {
-        const result = await estatesTypesModel.create({
+        const result = await estateTypesModel.create({
             name
         })
  
@@ -60,15 +60,15 @@ estatesTypesController.post('/estate_types', async (req, res) => {
  })
 
   //Route til update
- estatesTypesController.put('/estate_types', async(req, res)=>{
+ estateTypesController.put('/estate_types', async(req, res)=>{
      const { id, name} = req.body;
     
      if( !id || !name ) {
          return res.status(400).json({ message: 'Missing required data' });
      }
      try {
-         const result = await estatesTypesModel.update({
-            id, name
+         const result = await estateTypesModel.update({
+            name
          }, {where:{id}})
          if (result === 0) {
              return res.status(404).json({ message: 'Estate_types not found or no changes made' });
@@ -80,14 +80,14 @@ estatesTypesController.post('/estate_types', async (req, res) => {
   })
  
   //Route til delete
-  estatesTypesController.delete('/estate_types/:id([0-9]*)', async(req, res)=>{
+  estateTypesController.delete('/estate_types/:id([0-9]*)', async(req, res)=>{
      // Henter ID fra URL-parametrene
    const { id } = req.params;
    // Tjekker om et ID er angivet
    if (id) {
      try {
        // Forsøger at slette bilen fra databasen baseret på ID
-       await estatesTypesModel.destroy({
+       await estateTypesModel.destroy({
          where: { id }
        });
        // Returnerer succesbesked

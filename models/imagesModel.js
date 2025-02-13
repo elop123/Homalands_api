@@ -1,6 +1,7 @@
 import sequelize from '../config/sequelizeConfig.js';
 import { DataTypes, Model } from 'sequelize';
 
+
 export class imagesModel extends Model{}
 
 imagesModel.init({
@@ -32,3 +33,4 @@ imagesModel.init({
         updatedAt:true
     }
 )
+

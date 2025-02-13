@@ -61,7 +61,7 @@ estatesModel.init({
     },
     year_rebuilt:{
         type:DataTypes.INTEGER,
-        allowNull:false
+        allowNull:false,
        
     },
     description:{

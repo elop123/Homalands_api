@@ -11,7 +11,7 @@ favoritesModel.init({
         primaryKey:true
     },
     user_id:{
-        type:DataTypes.STRING,
+        type:DataTypes.INTEGER,
         allowNull:false
     },
     estate_id:{
