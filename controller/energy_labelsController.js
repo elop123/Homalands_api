@@ -1,8 +1,10 @@
 import express from 'express'
 import { energy_labelsModel } from '../models/energy_labelsModel.js'
+import { estatesModel } from '../models/estatesModel.js'
 
 
 export const energy_labelsController = express.Router()
+
 
 
 //Route to list(Read)
@@ -30,27 +32,27 @@ energy_labelsController.get('/energy_labels/:id([0-9]*)', async(req,res)=>{
      })
 
      if(!data) {
-         return res.json({ message: `Could not find city on id #${id}` })
+         return res.json({ message: `Could not find energy_label on id #${id}` })
      }
 
      return res.json(data);
  
  } catch (error) {
-     console.error(`Could not get city details: ${error}`)        
+     console.error(`Could not get energy_label details: ${error}`)        
  }
 })
 
 // Route to create (CREATE)
 energy_labelsController.post('/energy_labels', async (req, res) => {
-    const {name} = req.body;
+    const {name, energy_label_id} = req.body;
     
-    if( !name) {
+    if( !name || !energy_label_id) {
         return res.json({ message: 'Missing required data' })
     }
  
     try {
         const result = await energy_labelsModel.create({
-            name})
+            name, energy_label_id})
  
         res.status(201).json(result)
     } catch (error) {
@@ -60,14 +62,14 @@ energy_labelsController.post('/energy_labels', async (req, res) => {
 
   //Route til update
  energy_labelsController.put('/energy_labels', async(req, res)=>{
-     const { id, name} = req.body;
+     const { id,name, energy_label_id} = req.body;
     
-     if( !id || !name  ) {
+     if(  !id || !name || !energy_label_id   ) {
          return res.status(400).json({ message: 'Missing required data' });
      }
      try {
          const result = await energy_labelsModel.update({
-             id, name
+              name, energy_label_id
          }, {where:{id}})
          if (result === 0) {
              return res.status(404).json({ message: 'Energy_label not found or no changes made' });

@@ -6,18 +6,8 @@ import { estate_image_relModel } from '../models/estate_image_relModel.js'
 export const imagesController = express.Router()
 
 //Relations
-imagesModel.hasMany(estate_image_relModel, {
-  foreignKey: {
-  allowNull: false
-}
-})
-estate_image_relModel.belongsTo(imagesModel,
-  {
-      foreignKey: {
-      allowNull: false
-}
-  }
-)
+imagesModel.hasMany(estate_image_relModel)
+estate_image_relModel.belongsTo(imagesModel)
 
 
 //Route to list(Read)
@@ -25,10 +15,7 @@ imagesController.get('/images', async(req,res)=>{
 //res.send('get list')
    try {
        const data = await imagesModel.findAll({
-        include: [{ 
-          model: estate_image_relModel, 
-          attributes: ['image_id'] 
-      }]
+       
    });
 
        if(!data || data.length === 0) {
@@ -45,11 +32,7 @@ imagesController.get('/images/:id([0-9]*)', async(req,res)=>{
   try {
      const { id } = req.params
      const data = await imagesModel.findOne({ where: { id: id },
-      include: [
-        {
-            model: estate_image_relModel,
-            attributes: ['image_id']
-        }]
+
      })
 
      if(!data) {

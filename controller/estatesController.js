@@ -1,9 +1,28 @@
 import express from 'express'
 import { estatesModel } from '../models/estatesModel.js'
+import { citiesModel } from '../models/citiesModel.js'
+import { energy_labelsModel } from '../models/energy_labelsModel.js'
+import { favoritesModel } from '../models/favoritesModel.js'
+import {estateTypesModel} from '../models/estateTypesModel.js'
+import { reviewsModel } from '../models/reviewsModel.js'
 
 
 export const estatesController = express.Router()
+//Relations
+estatesModel.belongsTo(citiesModel)
+citiesModel.hasMany(estatesModel)
 
+estatesModel.belongsTo(energy_labelsModel)
+energy_labelsModel.hasMany(estatesModel)
+
+estatesModel.belongsTo(favoritesModel)
+favoritesModel.hasMany(estatesModel)
+
+estatesModel.belongsTo(estateTypesModel)
+estateTypesModel.hasMany(estatesModel)
+
+estatesModel.belongsTo(reviewsModel)
+reviewsModel.hasMany(estatesModel)
 
 //Route to list(Read)
 estatesController.get('/estates', async(req,res)=>{

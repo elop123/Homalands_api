@@ -1,7 +1,10 @@
 import sequelize from '../config/sequelizeConfig.js';
 import { DataTypes, Model } from 'sequelize';
+import { estatesModel } from './estatesModel.js';
+
 
 export class energy_labelsModel extends Model{}
+
 
 energy_labelsModel.init({
     id:{
@@ -14,6 +17,7 @@ energy_labelsModel.init({
         type:DataTypes.STRING,
         allowNull:false
     }
+   
 },
     {
         sequelize,
@@ -24,3 +28,4 @@ energy_labelsModel.init({
         updatedAt:true
     }
 )
+

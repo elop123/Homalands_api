@@ -15,7 +15,7 @@ dbController.get('/sync', async (req, res)=>{
         const result = await sequelize.sync({force:true})
         res.send('Database successfully synchronized')
     } catch (error) {
-        console.error('Synchronization error:${error}'); 
+        console.error(`Synchronization error: ${error}`); 
     }
 })
 
@@ -23,12 +23,14 @@ dbController.get('/sync', async (req, res)=>{
 dbController.get('/seedfromcsv', async (req, res) => {
   try {
     // Indsæt data fra CSV filer til de respektive modeller
-    await seedFromCsv('estates.csv', estatesModel);
     await seedFromCsv('cities.csv', citiesModel);
+    await seedFromCsv('estateTypes.csv', citiesModel);
+    await seedFromCsv('estates.csv', estatesModel);
+    await seedFromCsv('users.csv', usersModel);
     await seedFromCsv('images.csv', imagesModel);
     await seedFromCsv('reviews.csv', reviewsModel);
-    await seedFromCsv('staffs.csv', staffsModel);
-    await seedFromCsv('users.csv', usersModel);
+    await seedFromCsv('staffs.csv', staffsModel)
+    
     
    
 

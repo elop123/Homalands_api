@@ -1,40 +1,14 @@
 import express from 'express'
 import { citiesModel } from '../models/citiesModel.js';
-import { estatesModel } from '../models/estatesModel.js';
 
 
 export const citiesController = express.Router()
-
-
-// //Relations
-// citiesModel.hasMany(estatesModel, {
-//   foreignKey: {
-//   allowNull: false
-// }
-// })
-// estatesModel.belongsTo(citiesModel,
-//   {
-//       foreignKey: {
-//       allowNull: false
-// }
-//   }
-// )
 
 //Route to list(Read)
 citiesController.get('/cities', async(req,res)=>{
 //res.send('get list')
    try {
-       const data = await citiesModel.findAll({
-    //     include: [{
-    //       model: citiesModel,
-    //       attributes: ['name', 'zipcode']
-    //   }],
-    //   include: [{
-    //     model: estatesModel,
-    //     attributes: ['city_id']
-    // }]
-
-   });
+       const data = await citiesModel.findAll();
 
        if(!data || data.length === 0) {
           return res.json({ message: 'No data found'})
@@ -50,14 +24,7 @@ citiesController.get('/cities/:id([0-9]*)', async(req,res)=>{
   try {
      const { id } = req.params
      const data = await carModel.findOne({ where: { id: id },
-  //     include: [{
-  //       model: citiesModel,
-  //       attributes: ['name', 'zipcode']
-  //   }],
-  //   include: [{
-  //     model: estatesModel,
-  //     attributes: ['city_id']
-  // }]
+      
      })
 
      if(!data) {
