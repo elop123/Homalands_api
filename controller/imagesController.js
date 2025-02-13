@@ -5,9 +5,9 @@ import { estate_image_relModel } from '../models/estate_image_relModel.js'
 
 export const imagesController = express.Router()
 
-//Relations
-imagesModel.hasMany(estate_image_relModel)
-estate_image_relModel.belongsTo(imagesModel)
+// //Relations
+ imagesModel.hasMany(estate_image_relModel)
+ estate_image_relModel.belongsTo(imagesModel)
 
 
 //Route to list(Read)
@@ -15,7 +15,10 @@ imagesController.get('/images', async(req,res)=>{
 //res.send('get list')
    try {
        const data = await imagesModel.findAll({
-       
+        include: [
+                 {model:imagesModel,
+                   attributes:['filename']
+                 }]
    });
 
        if(!data || data.length === 0) {

@@ -1,5 +1,7 @@
 import sequelize from '../config/sequelizeConfig.js';
 import { DataTypes, Model } from 'sequelize';
+import { estatesModel } from './estatesModel.js';
+import { usersModel } from './usersModel.js';
 
 export class reviewsModel extends Model{}
 
@@ -28,11 +30,19 @@ reviewsModel.init({
     },
     estate_id:{
         type:DataTypes.BIGINT,
-        allowNull:false
+        allowNull:false,
+        references:{
+            model:estatesModel,
+            key:'id'
+        }
     },
     user_id:{
         type:DataTypes.BIGINT,
-        allowNull:false
+        allowNull:false,
+        references:{
+            model:usersModel,
+            key:'id'
+        }
     },
     is_active:{
         type:DataTypes.BOOLEAN,

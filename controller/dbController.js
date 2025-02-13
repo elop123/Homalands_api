@@ -6,7 +6,11 @@ import { usersModel } from '../models/usersModel.js'
 import { imagesModel } from '../models/imagesModel.js'
 import { reviewsModel} from '../models/reviewsModel.js'
 import {staffsModel} from '../models/staffsModel.js'
-
+import { favoritesModel } from '../models/favoritesModel.js'
+import { energy_labelsModel } from '../models/energy_labelsModel.js'
+import { seedFromCsv } from '../utils/seedUtils.js'
+import { estate_image_relModel } from '../models/estate_image_relModel.js'
+import { estateTypesModel } from '../models/estateTypesModel.js'
 
 export const dbController = express.Router()
 
@@ -23,13 +27,18 @@ dbController.get('/sync', async (req, res)=>{
 dbController.get('/seedfromcsv', async (req, res) => {
   try {
     // Indsæt data fra CSV filer til de respektive modeller
-    await seedFromCsv('cities.csv', citiesModel);
-    await seedFromCsv('estateTypes.csv', citiesModel);
-    await seedFromCsv('estates.csv', estatesModel);
-    await seedFromCsv('users.csv', usersModel);
-    await seedFromCsv('images.csv', imagesModel);
-    await seedFromCsv('reviews.csv', reviewsModel);
-    await seedFromCsv('staffs.csv', staffsModel)
+    await seedFromCsv('city.csv', citiesModel);
+    await seedFromCsv('estate-type.csv', estateTypesModel);
+    await seedFromCsv('energy-label.csv', energy_labelsModel);
+    await seedFromCsv('estate.csv', estatesModel);
+    await seedFromCsv('user.csv', usersModel);
+    await seedFromCsv('review.csv', reviewsModel);
+    await seedFromCsv('favorite.csv', favoritesModel);
+    await seedFromCsv('staff.csv', staffsModel)
+    await seedFromCsv('image.csv', imagesModel);
+    await seedFromCsv('estate-image-rel.csv', estate_image_relModel);
+    
+    
     
     
    

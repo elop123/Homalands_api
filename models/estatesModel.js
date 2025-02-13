@@ -57,7 +57,7 @@ estatesModel.init({
         type:DataTypes.INTEGER,
         allowNull:false
     },
-    year_of_construction:{
+    year_construction:{
         type:DataTypes.INTEGER,
         allowNull:false
         
@@ -107,7 +107,7 @@ estatesModel.init({
 },
     {
         sequelize,
-        modelName:"estates",
+        modelName:"estate",
         underscored:true,
         freezeTableName:false,
         createdAt:true,

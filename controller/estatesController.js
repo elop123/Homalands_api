@@ -5,6 +5,8 @@ import { energy_labelsModel } from '../models/energy_labelsModel.js'
 import { favoritesModel } from '../models/favoritesModel.js'
 import {estateTypesModel} from '../models/estateTypesModel.js'
 import { reviewsModel } from '../models/reviewsModel.js'
+import { imagesModel } from '../models/imagesModel.js'
+import { estate_image_relModel } from '../models/estate_image_relModel.js'
 
 
 export const estatesController = express.Router()
@@ -15,20 +17,23 @@ citiesModel.hasMany(estatesModel)
 estatesModel.belongsTo(energy_labelsModel)
 energy_labelsModel.hasMany(estatesModel)
 
-estatesModel.belongsTo(favoritesModel)
-favoritesModel.hasMany(estatesModel)
-
 estatesModel.belongsTo(estateTypesModel)
 estateTypesModel.hasMany(estatesModel)
-
-estatesModel.belongsTo(reviewsModel)
-reviewsModel.hasMany(estatesModel)
 
 //Route to list(Read)
 estatesController.get('/estates', async(req,res)=>{
 //res.send('get list')
    try {
        const data = await estatesModel.findAll({
+        include: [
+          {model:citiesModel,
+            attributes:['name', 'zipcode']
+          },
+          {model:energy_labelsModel,
+            attributes:['name']
+          },
+                 
+        ]
    });
 
        if(!data || data.length === 0) {
@@ -45,7 +50,11 @@ estatesController.get('/estates/:id([0-9]*)', async(req,res)=>{
   try {
      const { id } = req.params
      const data = await estatesModel.findOne({ where: { id: id },
-    
+      include: [
+        { model: citiesModel, attributes: ['name', 'zipcode'] },
+        { model: energy_labelsModel, attributes: ['name'] },
+        
+      ]
      })
 
      if(!data) {
@@ -62,11 +71,11 @@ estatesController.get('/estates/:id([0-9]*)', async(req,res)=>{
 // Route to create (CREATE)
 estatesController.post('/estates', async (req, res) => {
     const {address, price,payout,gross,net,cost, num_rooms,num_floors,floor_space,ground_space,
-        basement_space,year_of_construction, year_rebuilt,description, floorplan,num_clicks,
+        basement_space,year_construction, year_rebuilt,description, floorplan,num_clicks,
         city_id, type_id, energy_label_id} = req.body;
     
     if( !address || !price || !payout || !gross|| !net|| !cost|| !num_rooms || !num_floors || 
-        !floor_space || !ground_space|| !basement_space || !year_of_construction ||
+        !floor_space || !ground_space|| !basement_space || !year_construction ||
         !year_rebuilt || !description || !floorplan || !num_clicks || !city_id  || !type_id ||
         !energy_label_id) {
         return res.json({ message: 'Missing required data' })
@@ -75,7 +84,7 @@ estatesController.post('/estates', async (req, res) => {
     try {
         const result = await estatesModel.create({
             address, price,payout,gross,net,cost, num_rooms,num_floors,floor_space,ground_space,
-            basement_space,year_of_construction, year_rebuilt,description, floorplan,num_clicks,
+            basement_space,year_construction, year_rebuilt,description, floorplan,num_clicks,
             city_id, type_id, energy_label_id
         })
  
@@ -88,11 +97,11 @@ estatesController.post('/estates', async (req, res) => {
   //Route til update
  estatesController.put('/estates', async(req, res)=>{
      const { id, address, price,payout,gross,net,cost, num_rooms,num_floors,floor_space,ground_space,
-        basement_space,year_of_construction, year_rebuilt,description, floorplan,num_clicks,
+        basement_space,year_construction, year_rebuilt,description, floorplan,num_clicks,
         city_id, type_id, energy_label_id} = req.body;
     
      if( !id || !address || !price || !payout || !gross|| !net|| !cost|| !num_rooms || !num_floors || 
-        !floor_space || !ground_space|| !basement_space || !year_of_construction ||
+        !floor_space || !ground_space|| !basement_space || !year_construction ||
         !year_rebuilt || !description || !floorplan || !num_clicks || !city_id  || !type_id ||
         !energy_label_id ) {
          return res.status(400).json({ message: 'Missing required data' });
@@ -100,7 +109,7 @@ estatesController.post('/estates', async (req, res) => {
      try {
          const result = await estatesModel.update({
             id, address, price,payout,gross,net,cost, num_rooms,num_floors,floor_space,ground_space,
-            basement_space,year_of_construction, year_rebuilt,description, floorplan,num_clicks,
+            basement_space,year_construction, year_rebuilt,description, floorplan,num_clicks,
             city_id, type_id, energy_label_id
          }, {where:{id}})
          if (result === 0) {
